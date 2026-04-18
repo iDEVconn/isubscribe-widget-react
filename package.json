@@ -7,15 +7,17 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE.md",
+    "README.md"
   ],
   "scripts": {
     "build": "rollup -c",
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "react": ">=19.x",
-    "react-dom": ">=19.x"
+    "react": ">=18.x",
+    "react-dom": ">=18.x"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.2",
@@ -29,11 +31,18 @@
     "tslib": "^2.8.1",
     "typescript": "^6.0.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iDEVconn/isubscribe-widget-react.git"
+  },
   "keywords": [
     "subscription",
     "widget",
     "react",
     "isubscribe"
+  ],
+  "sideEffects": [
+    "*.css"
   ],
   "author": "TeamСo",
   "license": "MIT"
