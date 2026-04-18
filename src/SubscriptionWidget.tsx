@@ -7,6 +7,8 @@ export interface SubscriptionWidgetProps {
   apiBaseUrl?: string;
   containerClassName?: string;
   cardClassName?: string;
+  buttonText?: string;
+  onSubscribe?: (subscription: Subscription) => void;
   onError?: (error: Error) => void;
   onLoaded?: (subscriptions: Subscription[]) => void;
 }
@@ -16,6 +18,8 @@ export const SubscriptionWidget: React.FC<SubscriptionWidgetProps> = ({
   apiBaseUrl = 'https://api.isubscribe.com/api/v1/public/subscriptions',
   containerClassName,
   cardClassName,
+  buttonText = 'Subscribe',
+  onSubscribe,
   onError,
   onLoaded,
 }) => {
@@ -27,9 +31,7 @@ export const SubscriptionWidget: React.FC<SubscriptionWidgetProps> = ({
     const fetchSubscriptions = async () => {
       try {
         const response = await fetch(`${apiBaseUrl}/data`, {
-          headers: {
-            'X-API-KEY': apiKey,
-          },
+          headers: { 'X-API-KEY': apiKey },
         });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -46,8 +48,12 @@ export const SubscriptionWidget: React.FC<SubscriptionWidgetProps> = ({
       }
     };
 
-    fetchSubscriptions();
+    void fetchSubscriptions();
   }, [apiKey, apiBaseUrl, onLoaded, onError]);
+
+  const handleSubscribe = (sub: Subscription) => {
+    onSubscribe?.(sub);
+  };
 
   if (loading) {
     return <div className={styles.loader}>Loading subscriptions...</div>;
@@ -72,6 +78,8 @@ export const SubscriptionWidget: React.FC<SubscriptionWidgetProps> = ({
           key={sub.id}
           subscription={sub}
           cardClassName={cardClassName}
+          buttonText={buttonText}
+          onSubscribe={handleSubscribe}
         />
       ))}
     </div>
@@ -81,11 +89,15 @@ export const SubscriptionWidget: React.FC<SubscriptionWidgetProps> = ({
 interface CardProps {
   subscription: Subscription;
   cardClassName?: string;
+  buttonText: string;
+  onSubscribe: (sub: Subscription) => void;
 }
 
 const SubscriptionCard: React.FC<CardProps> = ({
   subscription: sub,
   cardClassName,
+  buttonText,
+  onSubscribe,
 }) => {
   const originalPrice = sub.price.originalPrice;
   const effectivePrice = sub.effectivePrice ?? originalPrice;
@@ -126,6 +138,9 @@ const SubscriptionCard: React.FC<CardProps> = ({
           ✨ Free trials available on selected features
         </div>
       )}
+      <button className={styles.button} onClick={() => onSubscribe(sub)}>
+        {buttonText}
+      </button>
     </div>
   );
 };
