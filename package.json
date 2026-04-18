@@ -1,0 +1,40 @@
+{
+  "name": "@teamco/isubscribe-widget-react",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "React widget to display iSubscribe subscription plans",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=19.x",
+    "react-dom": ">=19.x"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/react": "^19.2.14",
+    "prettier": "^3.8.3",
+    "rollup": "^4.60.2",
+    "rollup-plugin-dts": "^6.4.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tslib": "^2.8.1",
+    "typescript": "^6.0.3"
+  },
+  "keywords": [
+    "subscription",
+    "widget",
+    "react",
+    "isubscribe"
+  ],
+  "author": "TeamСo",
+  "license": "MIT"
+}

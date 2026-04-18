@@ -1,0 +1,106 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 0.5rem 0;
+}
+
+.description {
+    color: #4b5563;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #3b82f6;
+    margin: 1rem 0;
+}
+
+.originalPrice {
+    text-decoration: line-through;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.duration {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.features li {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.saleBadge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #ef4444;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.trialBadge {
+    background: #e0f2fe;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+}
+
+.trialNote {
+    background: #e0f2fe;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.loader, .error, .empty {
+    text-align: center;
+    padding: 2rem;
+    font-family: system-ui;
+}
+
+.loader {
+    color: #3b82f6;
+}
+
+.error {
+    color: #ef4444;
+}
