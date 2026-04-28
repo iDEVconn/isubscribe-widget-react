@@ -44,6 +44,6 @@
   "sideEffects": [
     "*.css"
   ],
-  "author": "TeamСo",
-  "license": "MIT"
+  "author": "iTeamco",
+  "license": "Apache-2.0"
 }

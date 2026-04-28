@@ -178,4 +178,4 @@ npm run build   # outputs to dist/
 
 ## License
 
-Apache 2.0 — see [LICENSE.md](LICENSE.md).
+Apache 2.0 — see [LICENSE.md](LICENSE.md). Architecture documented in [ARCHITECTURE.md](ARCHITECTURE.md).
