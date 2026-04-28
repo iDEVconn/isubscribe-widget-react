@@ -1,56 +1,92 @@
-/* src/SubscriptionWidget.module.css */
+/* src/SubscriptionWidget.module.css
+ *
+ * All visual values fall back through `--isw-*` CSS custom properties
+ * so a host app can theme the widget without forking. The host
+ * overrides the tokens (inline style on the widget root, parent
+ * stylesheet, or :root) and the widget honors them everywhere —
+ * dark mode "just works" because the host swaps the same tokens.
+ *
+ * Defaults preserve the original v1.0 light look.
+ *
+ * Logical properties (margin-inline-start, inset-block-start, etc.)
+ * keep the widget RTL-friendly without extra rules.
+ */
+
 .grid {
+  --isw-font: inherit;
+  --isw-surface: #ffffff;
+  --isw-text: #111827;
+  --isw-text-muted: #6c757d;
+  --isw-text-strong: #111827;
+  --isw-accent: #3b82f6;
+  --isw-accent-hover: #2563eb;
+  --isw-accent-text: #ffffff;
+  --isw-success: #10b981;
+  --isw-error: #ef4444;
+  --isw-sale: #ef4444;
+  --isw-sale-text: #ffffff;
+  --isw-trial-bg: #e0f2fe;
+  --isw-trial-text: #0369a1;
+  --isw-border: rgba(0, 0, 0, 0.06);
+  --isw-radius: 12px;
+  --isw-radius-pill: 999px;
+  --isw-gap: 1.5rem;
+  --isw-padding: 1.5rem;
+  --isw-shadow-card: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --isw-shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.12);
+
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  gap: var(--isw-gap);
+  font-family: var(--isw-font);
+  color: var(--isw-text);
 }
 
 .card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  transition: transform 0.2s;
+  background: var(--isw-surface);
+  border: 1px solid var(--isw-border);
+  border-radius: var(--isw-radius);
+  box-shadow: var(--isw-shadow-card);
+  padding: var(--isw-padding);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   position: relative;
 }
 
 .card:hover {
   transform: translateY(-4px);
+  box-shadow: var(--isw-shadow-card-hover);
 }
 
 .title {
   font-size: 1.5rem;
   font-weight: bold;
+  color: var(--isw-text-strong);
   margin: 0 0 0.5rem 0;
 }
 
 .description {
-  color: #4b5563;
+  color: var(--isw-text-muted);
   margin-bottom: 1rem;
 }
 
 .price {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #3b82f6;
+  color: var(--isw-accent);
   margin: 1rem 0;
 }
 
 .originalPrice {
   text-decoration: line-through;
-  color: #6c757d;
+  color: var(--isw-text-muted);
   font-size: 0.9rem;
-  margin-left: 0.5rem;
+  margin-inline-start: 0.5rem;
 }
 
 .duration {
-  color: #6c757d;
+  color: var(--isw-text-muted);
   font-size: 0.9rem;
 }
 
@@ -68,38 +104,47 @@
   flex-wrap: wrap;
 }
 
+.featureIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--isw-success);
+}
+
 .saleBadge {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: #ef4444;
-  color: white;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+  background: var(--isw-sale);
+  color: var(--isw-sale-text);
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: var(--isw-radius-pill);
   font-size: 0.75rem;
   font-weight: bold;
+  letter-spacing: 0.04em;
 }
 
 .trialBadge {
-  background: #e0f2fe;
+  background: var(--isw-trial-bg);
+  color: var(--isw-trial-text);
   font-size: 0.7rem;
   padding: 2px 8px;
-  border-radius: 12px;
-  margin-left: 8px;
+  border-radius: var(--isw-radius-pill);
+  margin-inline-start: 8px;
 }
 
 .trialNote {
-  background: #e0f2fe;
+  background: var(--isw-trial-bg);
+  color: var(--isw-trial-text);
   border-radius: 8px;
   padding: 0.5rem;
-  margin-top: 1rem;
+  margin-block-start: 1rem;
   font-size: 0.85rem;
   text-align: center;
 }
 
 .button {
-  background: #3b82f6;
-  color: white;
+  background: var(--isw-accent);
+  color: var(--isw-accent-text);
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -107,16 +152,22 @@
   font-weight: 600;
   cursor: pointer;
   width: 100%;
-  margin-top: 1rem;
+  margin-block-start: 1rem;
   transition: background 0.2s;
+  font-family: inherit;
 }
 
 .button:hover {
-  background: #2563eb;
+  background: var(--isw-accent-hover);
 }
 
 .button:active {
   transform: scale(0.98);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--isw-accent);
+  outline-offset: 2px;
 }
 
 .loader,
@@ -124,13 +175,17 @@
 .empty {
   text-align: center;
   padding: 2rem;
-  font-family: system-ui;
+  font-family: var(--isw-font, inherit);
 }
 
 .loader {
-  color: #3b82f6;
+  color: var(--isw-accent);
 }
 
 .error {
-  color: #ef4444;
+  color: var(--isw-error);
+}
+
+.empty {
+  color: var(--isw-text-muted);
 }
