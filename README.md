@@ -7,6 +7,10 @@ A React component library that renders subscription plan cards fetched from the 
 
 ---
 
+Architecture documented in [ARCHITECTURE.md](ARCHITECTURE.md).
+
+---
+
 ## Installation
 
 ```bash
@@ -241,4 +245,4 @@ npm run build   # outputs to dist/
 
 ## License
 
-Apache 2.0 — see [LICENSE.md](LICENSE.md). Architecture documented in [ARCHITECTURE.md](ARCHITECTURE.md).
+Apache 2.0 — see [LICENSE.md](LICENSE.md).
