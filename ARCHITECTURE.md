@@ -37,6 +37,7 @@ SubscriptionWidget   (forwardRef — public export)
 │
 └── SubscriptionCard   (module-private FC, one per plan)
     ├── Sale badge         (conditional — isOnSale && price reduced)
+    ├── Highlight badge    (conditional — subscriptionOverrides[id].badge)
     ├── Title
     ├── Description        (optional)
     ├── Price block
@@ -48,7 +49,7 @@ SubscriptionWidget   (forwardRef — public export)
     │       ├── Icon       (node | render-prop | null)
     │       └── Trial badge (conditional)
     ├── Trial note         (conditional — any feature has trial)
-    └── Subscribe button
+    └── Subscribe button   (bottom-aligned via flex auto margin)
 ```
 
 ---
@@ -102,7 +103,9 @@ CSS Modules provide local scope. All visual tokens are exposed as CSS custom pro
 
 Slot class names (`classNames` prop) let hosts append their own classes to any rendered region without breaking built-in styles.
 
-Layout uses CSS Grid with `auto-fill` + `minmax(280px, 1fr)` for responsive card wrapping with no JS breakpoints.
+Per-subscription overrides (`subscriptionOverrides` prop) target a single card by `Subscription.id`. Card receives merged class + style; an optional `highlightBadge` is rendered; the button accepts per-card text, class, and style.
+
+Layout uses CSS Grid with `auto-fill` + `minmax(280px, 1fr)` for responsive card wrapping with no JS breakpoints. Cards are flex columns with `margin-block-start: auto` on the button so CTAs align across cards regardless of content height.
 
 ---
 
@@ -134,8 +137,9 @@ export { SubscriptionWidget }
 export type {
   SubscriptionWidgetProps,   // Component props
   SubscriptionWidgetHandle,  // ref shape: { refetch(): void }
-  SubscriptionWidgetSlot,    // Union of 18 slot name strings
+  SubscriptionWidgetSlot,    // Union of 19 slot name strings
   SubscriptionWidgetLabels,  // i18n label overrides
+  SubscriptionOverride,      // Per-card visual override shape
   Subscription,              // API data model
   Feature,                   // Feature item inside Subscription
 }

@@ -23,12 +23,29 @@ export type SubscriptionWidgetSlot =
   | 'feature'
   | 'featureIcon'
   | 'saleBadge'
+  | 'highlightBadge'
   | 'trialBadge'
   | 'trialNote'
   | 'button'
   | 'loader'
   | 'error'
   | 'empty';
+
+/**
+ * Per-subscription visual overrides, keyed by subscription id.
+ * Lets the host highlight a specific plan ("Most popular") or
+ * tweak its CTA without touching the API response.
+ */
+export interface SubscriptionOverride {
+  className?: string;
+  style?: React.CSSProperties;
+  badge?: string;
+  badgeClassName?: string;
+  badgeStyle?: React.CSSProperties;
+  buttonText?: string;
+  buttonClassName?: string;
+  buttonStyle?: React.CSSProperties;
+}
 
 export interface SubscriptionWidgetLabels {
   loading?: string;
@@ -75,6 +92,9 @@ export interface SubscriptionWidgetProps {
   buttonText?: string;
   containerClassName?: string;
   cardClassName?: string;
+
+  /** Per-subscription visual overrides keyed by `Subscription.id`. */
+  subscriptionOverrides?: Record<string, SubscriptionOverride>;
 
   onSubscribe?: (subscription: Subscription) => void;
   onError?: (error: Error) => void;
@@ -128,6 +148,7 @@ export const SubscriptionWidget = forwardRef<
     buttonText,
     containerClassName,
     cardClassName,
+    subscriptionOverrides,
     onSubscribe,
     onError,
     onLoaded,
@@ -238,6 +259,7 @@ export const SubscriptionWidget = forwardRef<
           buttonLabel={buttonLabel}
           labels={merged}
           featureIcon={featureIcon}
+          override={subscriptionOverrides?.[sub.id]}
           onSubscribe={onSubscribe}
         />
       ))}
@@ -253,6 +275,7 @@ interface CardProps {
   buttonLabel: string;
   labels: Required<SubscriptionWidgetLabels>;
   featureIcon?: React.ReactNode | ((feature: Feature) => React.ReactNode) | null;
+  override?: SubscriptionOverride;
   onSubscribe?: (sub: Subscription) => void;
 }
 
@@ -264,6 +287,7 @@ const SubscriptionCard: React.FC<CardProps> = ({
   buttonLabel,
   labels,
   featureIcon,
+  override,
   onSubscribe,
 }) => {
   const originalPrice = sub.price.originalPrice;
@@ -290,11 +314,29 @@ const SubscriptionCard: React.FC<CardProps> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className={cx(styles.card, cardClassName, classNames?.card)}
+      className={cx(
+        styles.card,
+        cardClassName,
+        classNames?.card,
+        override?.className,
+      )}
+      style={override?.style}
     >
       {isOnSale && (
         <div className={cx(styles.saleBadge, classNames?.saleBadge)}>
           {labels.sale}
+        </div>
+      )}
+      {override?.badge && (
+        <div
+          className={cx(
+            styles.highlightBadge,
+            classNames?.highlightBadge,
+            override.badgeClassName,
+          )}
+          style={override.badgeStyle}
+        >
+          {override.badge}
         </div>
       )}
       <h3 id={titleId} className={cx(styles.title, classNames?.title)}>
@@ -342,10 +384,15 @@ const SubscriptionCard: React.FC<CardProps> = ({
       )}
       <button
         type="button"
-        className={cx(styles.button, classNames?.button)}
+        className={cx(
+          styles.button,
+          classNames?.button,
+          override?.buttonClassName,
+        )}
+        style={override?.buttonStyle}
         onClick={() => onSubscribe?.(sub)}
       >
-        {buttonLabel}
+        {override?.buttonText ?? buttonLabel}
       </button>
     </article>
   );

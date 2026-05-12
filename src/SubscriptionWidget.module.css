@@ -52,6 +52,8 @@
     transform 0.2s,
     box-shadow 0.2s;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -123,6 +125,21 @@
   letter-spacing: 0.04em;
 }
 
+.highlightBadge {
+  position: absolute;
+  inset-block-start: -0.75rem;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  background: var(--isw-accent);
+  color: var(--isw-accent-text);
+  padding: 0.25rem 0.875rem;
+  border-radius: var(--isw-radius-pill);
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  box-shadow: var(--isw-shadow-card);
+}
+
 .trialBadge {
   background: var(--isw-trial-bg);
   color: var(--isw-trial-text);
@@ -152,7 +169,7 @@
   font-weight: 600;
   cursor: pointer;
   width: 100%;
-  margin-block-start: 1rem;
+  margin-block-start: auto;
   transition: background 0.2s;
   font-family: inherit;
 }

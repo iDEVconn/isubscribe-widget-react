@@ -47,6 +47,7 @@ function App() {
 | `labels` | `Partial<SubscriptionWidgetLabels>` | No | Override any UI label string |
 | `featureIcon` | `ReactNode \| ((feature: Feature) => ReactNode) \| null` | No | Custom icon for feature list items |
 | `style` | `CSSProperties` | No | Inline styles — primary way to inject CSS custom properties |
+| `subscriptionOverrides` | `Record<string, SubscriptionOverride>` | No | Per-plan visual overrides keyed by `Subscription.id` (badge, card/button class & style, button text) |
 | `onSubscribe` | `(plan: Subscription) => void` | No | Called when the subscribe button is clicked |
 | `onError` | `(error: Error) => void` | No | Called on fetch failure |
 | `onLoaded` | `(plans: Subscription[]) => void` | No | Called after successful data fetch |
@@ -120,7 +121,60 @@ Every rendered region has a slot name. Pass a `classNames` map to attach your ow
 />
 ```
 
-Available slots: `container`, `card`, `title`, `description`, `price`, `originalPrice`, `duration`, `features`, `feature`, `featureIcon`, `saleBadge`, `trialBadge`, `trialNote`, `button`, `loader`, `error`, `empty`.
+Available slots: `container`, `card`, `title`, `description`, `price`, `originalPrice`, `duration`, `features`, `feature`, `featureIcon`, `saleBadge`, `highlightBadge`, `trialBadge`, `trialNote`, `button`, `loader`, `error`, `empty`.
+
+---
+
+## Per-subscription overrides
+
+Highlight a specific plan ("Most popular"), tweak a single CTA, or restyle one card — without touching the API response or every plan.
+
+Keys in the `subscriptionOverrides` map are `Subscription.id` values returned by the API. To discover them:
+
+- Inspect the API response at `${apiBaseUrl}/data` (defaults to `https://api.isubscribe.com/api/v1/public/subscriptions/data`). Each plan object has an `id` field — that's the key.
+- Or log them at runtime via `onLoaded`:
+  ```tsx
+  <SubscriptionWidget
+    apiKey="..."
+    onLoaded={(plans) => console.log(plans.map((p) => ({ id: p.id, title: p.title })))}
+  />
+  ```
+- Or check the iSubscribe admin dashboard where plans are managed — each plan's id is shown there.
+
+Unknown keys are ignored; if the matching plan disappears from the API, that override simply has no effect.
+
+```tsx
+<SubscriptionWidget
+  apiKey="..."
+  subscriptionOverrides={{
+    'pro-plan-id': {
+      badge: 'Most Popular',
+      className: 'highlighted-card',
+      style: { borderColor: 'gold' },
+      buttonText: 'Start Pro',
+      buttonClassName: 'gold-btn',
+    },
+    'enterprise-plan-id': {
+      buttonText: 'Contact Sales',
+    },
+  }}
+/>
+```
+
+Override shape (`SubscriptionOverride`):
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `className` | `string` | Extra class on the card root |
+| `style` | `CSSProperties` | Inline style on the card root |
+| `badge` | `string` | Renders a pill badge (uses `highlightBadge` slot) |
+| `badgeClassName` | `string` | Extra class on the badge |
+| `badgeStyle` | `CSSProperties` | Inline style on the badge |
+| `buttonText` | `string` | Overrides global `buttonText` / `labels.subscribe` for this card |
+| `buttonClassName` | `string` | Extra class on the button |
+| `buttonStyle` | `CSSProperties` | Inline style on the button |
+
+The subscribe button is bottom-aligned via flex layout, so buttons stay aligned across cards regardless of feature list length.
 
 ---
 
@@ -158,6 +212,7 @@ import type {
   SubscriptionWidgetHandle,
   SubscriptionWidgetSlot,
   SubscriptionWidgetLabels,
+  SubscriptionOverride,
   Subscription,
   Feature,
 } from '@teamco/isubscribe-widget-react';

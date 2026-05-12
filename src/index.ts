@@ -4,5 +4,6 @@ export type {
   SubscriptionWidgetSlot,
   SubscriptionWidgetLabels,
   SubscriptionWidgetHandle,
+  SubscriptionOverride,
 } from './SubscriptionWidget';
 export type { Subscription, Feature } from './types';
