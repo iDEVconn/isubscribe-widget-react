@@ -174,6 +174,14 @@ Override shape (`SubscriptionOverride`):
 | `buttonClassName` | `string` | Extra class on the button |
 | `buttonStyle` | `CSSProperties` | Inline style on the button |
 
+Button text resolves in this order (first defined wins):
+
+```
+subscriptionOverrides[id].buttonText  →  buttonText prop  →  labels.subscribe  →  "Subscribe"
+```
+
+All three are plain strings — the widget does not translate them. Pass already-localized values from your i18n library. For multi-language apps, prefer `labels.subscribe` (canonical i18n surface) and pass translated per-card overrides explicitly.
+
 The subscribe button is bottom-aligned via flex layout, so buttons stay aligned across cards regardless of feature list length.
 
 ---
