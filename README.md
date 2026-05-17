@@ -287,6 +287,20 @@ npm run build   # outputs to dist/
 
 ---
 
+## Testing
+
+The widget is covered by Vitest (jsdom + React Testing Library):
+
+```bash
+npm test            # one-shot run
+npm run test:watch  # watch mode
+npm run test:ui     # interactive UI
+```
+
+Tests live in `src/__tests__/` and cover the pure `classifyError` helper plus widget render behavior for every error reason (`invalid_key`, `unavailable`, `network`, `unknown`), label overrides, `fallbackNotification={false}` suppression, and the successful fetch path.
+
+---
+
 ## License
 
 Apache 2.0 — see [LICENSE.md](LICENSE.md).

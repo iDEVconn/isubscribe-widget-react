@@ -6,6 +6,7 @@ import React, {
   forwardRef,
 } from 'react';
 import type { Subscription, Feature, ISubscribeErrorReason } from './types';
+import { classifyError } from './classifyError';
 import styles from './SubscriptionWidget.module.css';
 
 /**
@@ -131,18 +132,6 @@ const DEFAULT_LABELS: Required<SubscriptionWidgetLabels> = {
   perPeriod: (duration) => `per ${duration}`,
   errorMessages: DEFAULT_ERROR_MESSAGES,
 };
-
-function classifyError(status: number | null, err: Error): ISubscribeErrorReason {
-  if (status === 401 || status === 403) return 'invalid_key';
-  if (status !== null && status >= 500) return 'unavailable';
-  if (status === null) {
-    if (err.name === 'TypeError' || /network|fetch|failed to fetch/i.test(err.message)) {
-      return 'network';
-    }
-    return 'unknown';
-  }
-  return 'unknown';
-}
 
 function cx(...names: Array<string | undefined | false>): string {
   return names.filter(Boolean).join(' ');
