@@ -21,6 +21,7 @@
   --isw-accent: #3b82f6;
   --isw-accent-hover: #2563eb;
   --isw-accent-text: #ffffff;
+  --isw-accent-price-text: #3b82f6;
   --isw-success: #10b981;
   --isw-error: #ef4444;
   --isw-sale: #ef4444;
@@ -38,7 +39,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--isw-gap);
-  font-family: var(--isw-font);
+  font-family: var(--isw-font), sans-serif;
   color: var(--isw-text);
 }
 
@@ -76,7 +77,7 @@
 .price {
   font-size: 1.8rem;
   font-weight: bold;
-  color: var(--isw-accent);
+  color: var(--isw-accent-price-text);
   margin: 1rem 0;
 }
 
@@ -95,7 +96,7 @@
 .features {
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
 .features li {
