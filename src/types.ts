@@ -9,6 +9,12 @@ export interface Feature {
   };
 }
 
+export type ISubscribeErrorReason =
+  | "invalid_key"
+  | "unavailable"
+  | "network"
+  | "unknown";
+
 export interface Subscription {
   id: string;
   title: string;

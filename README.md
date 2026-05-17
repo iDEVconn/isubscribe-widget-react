@@ -52,8 +52,9 @@ function App() {
 | `featureIcon` | `ReactNode \| ((feature: Feature) => ReactNode) \| null` | No | Custom icon for feature list items |
 | `style` | `CSSProperties` | No | Inline styles — primary way to inject CSS custom properties |
 | `subscriptionOverrides` | `Record<string, SubscriptionOverride>` | No | Per-plan visual overrides keyed by `Subscription.id` (badge, card/button class & style, button text) |
+| `fallbackNotification` | `boolean` | No | Render a built-in friendly error message when the API call fails. Set `false` to suppress the UI and handle errors yourself via `onError`. Default: `true` |
 | `onSubscribe` | `(plan: Subscription) => void` | No | Called when the subscribe button is clicked |
-| `onError` | `(error: Error) => void` | No | Called on fetch failure |
+| `onError` | `(error: Error, reason: ISubscribeErrorReason) => void` | No | Called on fetch failure. `reason` classifies the error (`invalid_key` \| `unavailable` \| `network` \| `unknown`) |
 | `onLoaded` | `(plans: Subscription[]) => void` | No | Called after successful data fetch |
 
 ### Ref handle
@@ -190,6 +191,48 @@ The subscribe button is bottom-aligned via flex layout, so buttons stay aligned 
 
 ---
 
+## Error handling
+
+The widget classifies fetch failures into four reasons and renders a friendly message by default. Override any of them via `labels.errorMessages`, or suppress the built-in UI entirely with `fallbackNotification={false}` and react in `onError`.
+
+| Reason | Triggered by | Default message |
+|--------|--------------|-----------------|
+| `invalid_key` | HTTP `401` / `403` | "Invalid API key. Check your iSubscribe credentials." |
+| `unavailable` | HTTP `5xx` | "Subscription service is temporarily unavailable. Please try again later." |
+| `network` | `fetch` rejected (offline, DNS, CORS, timeout) | "Network problem. Check your connection and try again." |
+| `unknown` | Any other failure | "Failed to load subscription plans." |
+
+```tsx
+<SubscriptionWidget
+  apiKey="..."
+  labels={{
+    errorMessages: {
+      invalid_key: 'Неверный API ключ. Проверьте настройки iSubscribe.',
+      unavailable: 'Сервис подписок временно недоступен.',
+      network: 'Проблема с сетью.',
+    },
+  }}
+  onError={(err, reason) => {
+    console.error('[isubscribe]', reason, err);
+    sentry.captureException(err, { tags: { reason } });
+  }}
+/>
+```
+
+Suppress the built-in notification and render your own:
+
+```tsx
+<SubscriptionWidget
+  apiKey="..."
+  fallbackNotification={false}
+  onError={(err, reason) => toast.error(myFriendlyMap[reason])}
+/>
+```
+
+The raw `error.message` (e.g. `HTTP 401: Unauthorized`) is **not** shown in the default UI — it remains accessible via `onError` for logging.
+
+---
+
 ## Internationalization
 
 Override any UI string via the `labels` prop:
@@ -227,6 +270,7 @@ import type {
   SubscriptionOverride,
   Subscription,
   Feature,
+  ISubscribeErrorReason,
 } from '@teamco/isubscribe-widget-react';
 ```
 

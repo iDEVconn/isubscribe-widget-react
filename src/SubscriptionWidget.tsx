@@ -5,7 +5,7 @@ import React, {
   useState,
   forwardRef,
 } from 'react';
-import type { Subscription, Feature } from './types';
+import type { Subscription, Feature, ISubscribeErrorReason } from './types';
 import styles from './SubscriptionWidget.module.css';
 
 /**
@@ -60,6 +60,11 @@ export interface SubscriptionWidgetLabels {
    * localised "per X" label. Default: `per ${duration}`.
    */
   perPeriod?: (duration: string) => string;
+  /**
+   * Friendly per-reason error messages. Used by the built-in error notification
+   * when `fallbackNotification` is enabled. Missing reasons fall back to `error`.
+   */
+  errorMessages?: Partial<Record<ISubscribeErrorReason, string>>;
 }
 
 export interface SubscriptionWidgetHandle {
@@ -96,10 +101,24 @@ export interface SubscriptionWidgetProps {
   /** Per-subscription visual overrides keyed by `Subscription.id`. */
   subscriptionOverrides?: Record<string, SubscriptionOverride>;
 
+  /**
+   * Render a built-in friendly error notification when the API call fails.
+   * Set `false` to suppress the UI and handle errors yourself via `onError`.
+   * Default: `true`.
+   */
+  fallbackNotification?: boolean;
+
   onSubscribe?: (subscription: Subscription) => void;
-  onError?: (error: Error) => void;
+  onError?: (error: Error, reason: ISubscribeErrorReason) => void;
   onLoaded?: (subscriptions: Subscription[]) => void;
 }
+
+const DEFAULT_ERROR_MESSAGES: Required<Record<ISubscribeErrorReason, string>> = {
+  invalid_key: 'Invalid API key. Check your iSubscribe credentials.',
+  unavailable: 'Subscription service is temporarily unavailable. Please try again later.',
+  network: 'Network problem. Check your connection and try again.',
+  unknown: 'Failed to load subscription plans.',
+};
 
 const DEFAULT_LABELS: Required<SubscriptionWidgetLabels> = {
   loading: 'Loading subscriptions...',
@@ -110,7 +129,20 @@ const DEFAULT_LABELS: Required<SubscriptionWidgetLabels> = {
   trial: 'Trial',
   trialNote: 'Free trials available on selected features',
   perPeriod: (duration) => `per ${duration}`,
+  errorMessages: DEFAULT_ERROR_MESSAGES,
 };
+
+function classifyError(status: number | null, err: Error): ISubscribeErrorReason {
+  if (status === 401 || status === 403) return 'invalid_key';
+  if (status !== null && status >= 500) return 'unavailable';
+  if (status === null) {
+    if (err.name === 'TypeError' || /network|fetch|failed to fetch/i.test(err.message)) {
+      return 'network';
+    }
+    return 'unknown';
+  }
+  return 'unknown';
+}
 
 function cx(...names: Array<string | undefined | false>): string {
   return names.filter(Boolean).join(' ');
@@ -149,6 +181,7 @@ export const SubscriptionWidget = forwardRef<
     containerClassName,
     cardClassName,
     subscriptionOverrides,
+    fallbackNotification = true,
     onSubscribe,
     onError,
     onLoaded,
@@ -157,7 +190,7 @@ export const SubscriptionWidget = forwardRef<
 ) {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<{ err: Error; reason: ISubscribeErrorReason } | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   // Stable refs so callback identity changes never trigger a re-fetch.
@@ -182,11 +215,13 @@ export const SubscriptionWidget = forwardRef<
     setError(null);
 
     const run = async () => {
+      let status: number | null = null;
       try {
         const response = await fetch(`${apiBaseUrl}/data`, {
           headers: { 'X-API-KEY': apiKey },
           signal: controller.signal,
         });
+        status = response.status;
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
@@ -197,8 +232,9 @@ export const SubscriptionWidget = forwardRef<
       } catch (err) {
         if ((err as Error).name === 'AbortError') return;
         const e = err instanceof Error ? err : new Error('Unknown error');
-        setError(e);
-        onErrorRef.current?.(e);
+        const reason = classifyError(status, e);
+        setError({ err: e, reason });
+        onErrorRef.current?.(e, reason);
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -227,9 +263,14 @@ export const SubscriptionWidget = forwardRef<
   }
 
   if (error) {
+    if (!fallbackNotification) return null;
+    const friendly =
+      merged.errorMessages?.[error.reason] ??
+      DEFAULT_ERROR_MESSAGES[error.reason] ??
+      merged.error;
     return (
       <div role="alert" className={cx(styles.error, classNames?.error)}>
-        {merged.error}: {error.message}
+        {friendly}
       </div>
     );
   }

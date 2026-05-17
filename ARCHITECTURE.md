@@ -87,10 +87,21 @@ All state lives in `SubscriptionWidget`. `SubscriptionCard` is stateless.
 |-------|------|---------|
 | `subscriptions` | `Subscription[]` | Fetched plans |
 | `loading` | `boolean` | Shows loader slot while fetching |
-| `error` | `Error \| null` | Shows error slot on failure |
+| `error` | `{ err: Error; reason: ISubscribeErrorReason } \| null` | Shows error slot on failure. `reason` classifies the failure (`invalid_key` / `unavailable` / `network` / `unknown`) so the widget can render a friendly default message and consumers can branch in `onError` |
 | `reloadKey` | `number` | Increment to trigger re-fetch |
 
 Callbacks (`onSubscribe`, `onError`, `onLoaded`) are stabilized via `useRef` wrappers so they never appear as `useEffect` dependencies, preventing infinite fetch loops when callers pass inline functions.
+
+### Error classification
+
+`classifyError(status, err)` maps the fetch outcome to an `ISubscribeErrorReason`:
+
+- HTTP `401`/`403` → `invalid_key`
+- HTTP `5xx` → `unavailable`
+- No HTTP status (fetch rejected — offline, DNS, CORS, timeout) → `network`
+- Anything else → `unknown`
+
+When `fallbackNotification` is `true` (default), the error slot renders the friendly string from `labels.errorMessages[reason]` (with built-in English fallbacks). Set `fallbackNotification={false}` to suppress the UI and react in `onError` only. Raw `error.message` is never shown in the default UI — it remains accessible to consumers for logging.
 
 ---
 

@@ -6,4 +6,4 @@ export type {
   SubscriptionWidgetHandle,
   SubscriptionOverride,
 } from './SubscriptionWidget';
-export type { Subscription, Feature } from './types';
+export type { Subscription, Feature, ISubscribeErrorReason } from './types';

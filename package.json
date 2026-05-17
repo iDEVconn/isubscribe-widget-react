@@ -1,6 +1,6 @@
 {
   "name": "@teamco/isubscribe-widget-react",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "type": "module",
   "description": "React widget to display iSubscribe subscription plans",
   "main": "dist/index.cjs",
