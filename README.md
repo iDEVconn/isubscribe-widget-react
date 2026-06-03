@@ -2,7 +2,7 @@
 
 A React component library that renders subscription plan cards fetched from the iSubscribe API. Drop it into any React app and get a fully themed, accessible subscription selection UI with a single component.
 
-[![npm](https://img.shields.io/npm/v/@teamco/isubscribe-widget-react)](https://www.npmjs.com/package/@teamco/isubscribe-widget-react)
+[![npm](https://img.shields.io/npm/v/@idevconn/isubscribe-widget-react)](https://www.npmjs.com/package/@idevconn/isubscribe-widget-react)
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ---
@@ -14,9 +14,9 @@ Architecture documented in [ARCHITECTURE.md](ARCHITECTURE.md).
 ## Installation
 
 ```bash
-npm install @teamco/isubscribe-widget-react
+npm install @idevconn/isubscribe-widget-react
 # or
-yarn add @teamco/isubscribe-widget-react
+yarn add @idevconn/isubscribe-widget-react
 ```
 
 React 18+ is a peer dependency — it must already be installed in your project.
@@ -26,7 +26,7 @@ React 18+ is a peer dependency — it must already be installed in your project.
 ## Quick Start
 
 ```tsx
-import { SubscriptionWidget } from '@teamco/isubscribe-widget-react';
+import { SubscriptionWidget } from '@idevconn/isubscribe-widget-react';
 
 function App() {
   return (
@@ -271,7 +271,7 @@ import type {
   Subscription,
   Feature,
   ISubscribeErrorReason,
-} from '@teamco/isubscribe-widget-react';
+} from '@idevconn/isubscribe-widget-react';
 ```
 
 ---
