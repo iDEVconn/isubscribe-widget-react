@@ -23,6 +23,7 @@ export type SubscriptionWidgetSlot =
   | 'features'
   | 'feature'
   | 'featureIcon'
+  | 'featureDescription'
   | 'saleBadge'
   | 'highlightBadge'
   | 'trialBadge'
@@ -395,14 +396,28 @@ const SubscriptionCard: React.FC<CardProps> = ({
           {sub.features.map((feature, idx) => (
             <li key={idx} className={classNames?.feature}>
               {renderFeatureIcon(feature)}
-              {feature.title}
-              {feature.hasTrial && (
-                <span
-                  className={cx(styles.trialBadge, classNames?.trialBadge)}
-                >
-                  {labels.trial}
+              <span className={styles.featureContent}>
+                <span>
+                  {feature.title}
+                  {feature.hasTrial && (
+                    <span
+                      className={cx(styles.trialBadge, classNames?.trialBadge)}
+                    >
+                      {labels.trial}
+                    </span>
+                  )}
                 </span>
-              )}
+                {feature.description && (
+                  <span
+                    className={cx(
+                      styles.featureDescription,
+                      classNames?.featureDescription,
+                    )}
+                  >
+                    {feature.description}
+                  </span>
+                )}
+              </span>
             </li>
           ))}
         </ul>
