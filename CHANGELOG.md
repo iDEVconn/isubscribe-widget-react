@@ -1,5 +1,19 @@
 # @idevconn/isubscribe-widget-react
 
+## 2.5.0
+
+### Minor Changes
+
+- Add `--isw-button-*` CSS tokens for outlined/ghost button styling
+
+  New tokens: `--isw-button-bg`, `--isw-button-color`, `--isw-button-border`,
+  `--isw-button-bg-hover`, `--isw-button-color-hover`, `--isw-button-border-hover`.
+
+  Default values preserve the existing solid-accent button behaviour (no breaking change).
+  Set `--isw-button-bg: transparent` and `--isw-button-border` on the grid root to switch
+  all default plan buttons to outlined style. Restore solid fill per-plan via
+  `subscriptionOverrides[id].buttonStyle`.
+
 ## 2.4.0
 
 ### Minor Changes
