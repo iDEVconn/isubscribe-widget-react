@@ -26,6 +26,9 @@
     "test:ui": "vitest --ui",
     "prepare": "npm run build"
   },
+  "overrides": {
+    "yaml": "^2.4.2"
+  },
   "peerDependencies": {
     "react": ">=18.x",
     "react-dom": ">=18.x"
