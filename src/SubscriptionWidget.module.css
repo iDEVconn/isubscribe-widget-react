@@ -36,6 +36,15 @@
   --isw-shadow-card: 0 4px 12px rgba(0, 0, 0, 0.1);
   --isw-shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.12);
 
+  /* Button tokens — defined on .grid so host can override via style prop.
+   * Defaults: solid accent button (v1 behaviour). */
+  --isw-button-bg: var(--isw-accent);
+  --isw-button-color: var(--isw-accent-text);
+  --isw-button-border: transparent;
+  --isw-button-bg-hover: var(--isw-accent-hover);
+  --isw-button-color-hover: var(--isw-button-color);
+  --isw-button-border-hover: var(--isw-button-border);
+
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--isw-gap);
@@ -172,17 +181,9 @@
 }
 
 .button {
-  /* Per-button tokens — default to solid accent (v1 behaviour).
-   * Host overrides --isw-button-bg / --isw-button-color / --isw-button-border
-   * on the grid root to switch all default plan buttons to outlined.
-   * Individual plans restore solid via subscriptionOverrides.buttonStyle. */
-  --isw-button-bg:            var(--isw-accent);
-  --isw-button-color:         var(--isw-accent-text);
-  --isw-button-border:        transparent;
-  --isw-button-bg-hover:      var(--isw-accent-hover);
-  --isw-button-color-hover:   var(--isw-button-color);
-  --isw-button-border-hover:  var(--isw-button-border);
-
+  /* Tokens defined on .grid — inherited here. Host sets them on the
+   * grid root via the style prop; subscriptionOverrides.buttonStyle
+   * can restore solid fill per-card by re-setting the tokens inline. */
   background: var(--isw-button-bg);
   color: var(--isw-button-color);
   border: 1.5px solid var(--isw-button-border);

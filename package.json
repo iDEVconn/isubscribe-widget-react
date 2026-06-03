@@ -1,6 +1,6 @@
 {
   "name": "@idevconn/isubscribe-widget-react",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "type": "module",
   "description": "React widget to display iSubscribe subscription plans",
   "main": "dist/index.cjs",

@@ -1,5 +1,11 @@
 # @idevconn/isubscribe-widget-react
 
+## 2.5.1
+
+### Patch Changes
+
+- Move --isw-button-\* defaults to .grid so host style prop can override them (inheritance fix)
+
 ## 2.5.0
 
 ### Minor Changes
