@@ -96,18 +96,54 @@ All visual tokens are CSS custom properties with an `--isw-` prefix. Set them vi
 | `--isw-surface` | `#fff` | Card background |
 | `--isw-text` | `#111` | Primary text |
 | `--isw-text-muted` | `#666` | Secondary text |
-| `--isw-accent` | `#2563eb` | Button and highlight color |
-| `--isw-success` | `#16a34a` | Positive/feature indicators |
-| `--isw-error` | `#dc2626` | Error state |
-| `--isw-sale` | `#ea580c` | Sale badge |
-| `--isw-trial` | `#7c3aed` | Trial badge |
-| `--isw-gap` | `1.5rem` | Grid spacing |
-| `--isw-padding` | `1.5rem` | Card padding |
+| `--isw-accent` | `#2563eb` | Badge and featured-button fill color |
+| `--isw-accent-hover` | `#1d4ed8` | Featured-button hover fill |
+| `--isw-accent-text` | `#fff` | Featured-button label color |
+| `--isw-accent-price-text` | `#2563eb` | Price value color |
+| `--isw-success` | `#16a34a` | Feature check icon color |
+| `--isw-error` | `#dc2626` | Error state text |
+| `--isw-sale` | `#ea580c` | Sale badge background |
+| `--isw-sale-text` | `#fff` | Sale badge label |
+| `--isw-trial-bg` | `#e0f2fe` | Trial badge / note background |
+| `--isw-trial-text` | `#0369a1` | Trial badge / note text |
+| `--isw-button-bg` | `var(--isw-accent)` | Default button background — set to `transparent` for outlined style |
+| `--isw-button-color` | `var(--isw-accent-text)` | Default button label color |
+| `--isw-button-border` | `transparent` | Default button border color — set to your border token for outlined style |
+| `--isw-button-bg-hover` | `var(--isw-accent-hover)` | Default button background on hover |
+| `--isw-button-color-hover` | `var(--isw-button-color)` | Default button label on hover |
+| `--isw-button-border-hover` | `var(--isw-button-border)` | Default button border on hover |
+| `--isw-gap` | `1.5rem` | Grid spacing between cards |
+| `--isw-padding` | `1.5rem` | Card inner padding |
 | `--isw-radius` | `12px` | Card border radius |
 | `--isw-radius-pill` | `9999px` | Badge border radius |
-| `--isw-card-shadow` | `0 2px 8px …` | Card resting shadow |
-| `--isw-card-hover` | `0 8px 24px …` | Card hover shadow |
+| `--isw-shadow-card` | `0 4px 12px …` | Card resting shadow |
+| `--isw-shadow-card-hover` | `0 8px 22px …` | Card hover shadow |
+| `--isw-border` | `rgba(0,0,0,.06)` | Card border color |
 | `--isw-font` | `inherit` | Font family |
+
+#### Outlined (ghost) buttons
+
+Set three tokens on the grid root to switch all default plan buttons to an outlined style. Featured plans restore solid fill via `subscriptionOverrides[id].buttonStyle`.
+
+```tsx
+<SubscriptionWidget
+  style={{
+    '--isw-button-bg':           'transparent',
+    '--isw-button-color':        '#1e293b',
+    '--isw-button-border':       '#e2e8f0',
+    '--isw-button-bg-hover':     '#f8fafc',
+    '--isw-button-border-hover': '#94a3b8',
+  }}
+  subscriptionOverrides={{
+    'featured-plan-id': {
+      style: {
+        '--isw-button-bg':    '#7c3aed',
+        '--isw-button-color': '#fff',
+        '--isw-button-border':'#7c3aed',
+      },
+    },
+  }}
+/>
 
 ---
 

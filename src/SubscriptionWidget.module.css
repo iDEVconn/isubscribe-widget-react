@@ -172,9 +172,20 @@
 }
 
 .button {
-  background: var(--isw-accent);
-  color: var(--isw-accent-text);
-  border: none;
+  /* Per-button tokens — default to solid accent (v1 behaviour).
+   * Host overrides --isw-button-bg / --isw-button-color / --isw-button-border
+   * on the grid root to switch all default plan buttons to outlined.
+   * Individual plans restore solid via subscriptionOverrides.buttonStyle. */
+  --isw-button-bg:            var(--isw-accent);
+  --isw-button-color:         var(--isw-accent-text);
+  --isw-button-border:        transparent;
+  --isw-button-bg-hover:      var(--isw-accent-hover);
+  --isw-button-color-hover:   var(--isw-button-color);
+  --isw-button-border-hover:  var(--isw-button-border);
+
+  background: var(--isw-button-bg);
+  color: var(--isw-button-color);
+  border: 1.5px solid var(--isw-button-border);
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 1rem;
@@ -182,12 +193,14 @@
   cursor: pointer;
   width: 100%;
   margin-block-start: auto;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   font-family: inherit;
 }
 
 .button:hover {
-  background: var(--isw-accent-hover);
+  background: var(--isw-button-bg-hover);
+  color: var(--isw-button-color-hover);
+  border-color: var(--isw-button-border-hover);
 }
 
 .button:active {
