@@ -9,7 +9,8 @@ const PLAN: Subscription = {
   price: {
     originalPrice: 0,
     currency: 'USD',
-    duration: { period: 1, type: 'month' },
+    isDiscounted: false,
+    duration: { period: 1, type: 'MONTH' },
   },
 };
 
