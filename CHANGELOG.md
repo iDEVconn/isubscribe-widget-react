@@ -1,5 +1,11 @@
 # @idevconn/isubscribe-widget-react
 
+## 2.5.2
+
+### Patch Changes
+
+- Update dependencies to latest semver-compatible versions.
+
 ## 2.5.1
 
 ### Patch Changes
